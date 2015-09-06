@@ -40,6 +40,19 @@ func main() {
 		}
 	}
 
+	if cmd == "default" {
+		if argNum == 2 {
+			if exists(gfDir + "/" + args[1]) {
+				if exists(gfDir + "/.default") {
+					os.Remove(gfDir + "/.default")
+				}
+				if err := os.Symlink(gfDir+"/"+args[1], gfDir+"/.default"); err != nil {
+					//Log error
+				}
+			}
+		}
+	}
+
 	if cmd == "sync" {
 		// rsync this because I'm too lazy to think of anything better
 		if argNum == 2 {
