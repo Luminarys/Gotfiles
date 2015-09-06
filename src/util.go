@@ -15,3 +15,12 @@ func exists(path string) bool {
 	}
 	return false
 }
+
+func stringInSliceInd(a string, list []string) (bool, int) {
+	for i, b := range list {
+		if b == a {
+			return true, i
+		}
+	}
+	return false, -1
+}

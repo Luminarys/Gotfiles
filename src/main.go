@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"os/exec"
 )
 
 var homeDir string = os.Getenv("HOME")
@@ -45,12 +44,7 @@ func main() {
 		// rsync this because I'm too lazy to think of anything better
 		if argNum == 2 {
 			if exists(gfDir + "/" + args[1]) {
-				cmd := "rsync"
-				args := []string{"-r", "--existing", homeDir + "/", gfDir + "/" + args[1]}
-				if err := exec.Command(cmd, args...).Run(); err != nil {
-					os.Exit(1)
-				}
-				if err := sync(gfDir + "/.default"); err != nil {
+				if err := sync(gfDir + "/" + args[1]); err != nil {
 					// Log error
 				}
 			} else {
@@ -61,6 +55,40 @@ func main() {
 				if err := sync(gfDir + "/.default"); err != nil {
 					// Log error
 				}
+			} else {
+				// Log error
+			}
+		}
+	}
+
+	if cmd == "deploy" {
+		force := false
+		if exists, ind := stringInSliceInd("-f", args); exists {
+			args = append(args[:ind], args[ind+1:]...)
+			argNum--
+			force = true
+		}
+		// Deploys the entire default repo
+		if argNum == 1 {
+			if exists(gfDir + "/.default") {
+				deploy(gfDir+"/.default/", force)
+			} else {
+				// Log error
+			}
+		} else if argNum == 2 {
+			// If a repo or a specific file/dir has been specified
+			if exists(gfDir + "/" + args[1]) {
+				deploy(gfDir+"/"+args[1]+"/", force)
+			} else {
+				if exists(gfDir + "/.default/" + args[1]) {
+					deploy(gfDir+"/.default/"+args[1], force)
+				} else {
+					// Log error
+				}
+			}
+		} else {
+			if exists(gfDir+"/"+args[1]) && exists(gfDir+"/"+args[1]+"/"+args[2]) {
+				deploy(gfDir+"/"+args[1]+"/"+args[2], force)
 			} else {
 				// Log error
 			}
