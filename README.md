@@ -1,8 +1,10 @@
 # Gotfiles
-Dotfiles made (more) sane.
+Gotfiles is a simpler way of managing and sharing your dotfiles. Rather than create some deployment shell script, and have to constantly keep a custom directory updated with your dotfiles, gotfiles lets you do this with a few simple commands.
+In addition, gotfiles makes it easy to try out dotfiles from other people by allowing you to select what repository of dotfiles you want to deploy from.
 
 # Requirements
 * Go
+* rsync
 
 # Setup
 Run `make && sudo make install` and you should be good to go.
